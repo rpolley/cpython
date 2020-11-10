@@ -1,0 +1,2 @@
+Make distutils.command.config utility functions that create temporary files
+thread safe

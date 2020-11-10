@@ -10,6 +10,7 @@ this header file lives".
 """
 
 import os, re
+from uuid import uuid4
 
 from distutils.core import Command
 from distutils.errors import DistutilsExecError
@@ -105,7 +106,7 @@ class config(Command):
                 self.compiler.set_library_dirs(self.library_dirs)
 
     def _gen_temp_sourcefile(self, body, headers, lang):
-        filename = "_configtest" + LANG_EXT[lang]
+        filename = "_configtest_" + str(uuid4()) + LANG_EXT[lang]
         with open(filename, "w") as file:
             if headers:
                 for header in headers:
@@ -118,7 +119,7 @@ class config(Command):
 
     def _preprocess(self, body, headers, include_dirs, lang):
         src = self._gen_temp_sourcefile(body, headers, lang)
-        out = "_configtest.i"
+        out = "_configtest{}.i".format(str(uuid4()))
         self.temp_files.extend([src, out])
         self.compiler.preprocess(src, out, include_dirs=include_dirs)
         return (src, out)
